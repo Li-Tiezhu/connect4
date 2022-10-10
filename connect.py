@@ -29,14 +29,38 @@ class ConnectX(gym.Env):
             action = int(action)
         res = self.trainer.step(action)
 
+        print("--STEP--------", res)
+
         obs = np.array(res[0]['board'])
         obs = np.expand_dims(obs, axis=0)
         obs = np.expand_dims(obs, axis=0)
         obs = obs.astype(np.uint8)
 
         reward = res[1]
+
         done = res[2]
         info = res[3]
+
+        # if reward is None:
+        #     reward = -10
+        # elif reward == 0:
+        #     reward = -20
+        # elif reward == 1:
+        #     reward = 20
+
+        if done:
+            if reward == 1:  # Won
+                reward = 30
+            elif reward == -1:  # Lost
+                reward = -20
+            elif reward == 0:  # Lost
+                reward = -30
+            elif reward is None:  # Draw
+                reward = -30
+            else:
+                reward = 10
+        else:
+            reward = -0.05
 
         return obs, reward, done, info
 
@@ -55,3 +79,6 @@ class ConnectX(gym.Env):
 
     def render(self, **kwargs):
         return self.env.render(**kwargs)
+
+    def run(self, ls):
+        self.env.run(ls)
