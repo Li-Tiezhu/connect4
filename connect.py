@@ -32,6 +32,8 @@ class ConnectX(gym.Env):
         print("--STEP--------", res)
 
         obs = np.array(res[0]['board'])
+        mark = res[0]['mark']
+        obs_j = obs
         obs = np.expand_dims(obs, axis=0)
         obs = np.expand_dims(obs, axis=0)
         obs = obs.astype(np.uint8)
@@ -53,14 +55,22 @@ class ConnectX(gym.Env):
                 reward = 30
             elif reward == -1:  # Lost
                 reward = -20
-            elif reward == 0:  # Lost
+            elif reward == 0:  # 平局
                 reward = -30
-            elif reward is None:  # Draw
-                reward = -30
+            elif reward is None:  # 超出
+                reward = -60
             else:
                 reward = 10
         else:
-            reward = -0.05
+            # obs_j = obs_j.reshape((self.env.configuration.rows, self.env.configuration.columns))
+            # print(obs_j)
+            # for i in range(0, self.env.configuration.rows):
+            #     if obs_j[i, action] == mark:
+            #         row = i
+            #         break
+            # ttc = obs_j[row-1:row+1, action-1:action+1]
+            # sum_obs = np.sum(ttc = mark)
+            reward = 0.1
 
         return obs, reward, done, info
 

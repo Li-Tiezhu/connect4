@@ -19,10 +19,11 @@ Model = DQN("MlpPolicy",
             batch_size=100,
             buffer_size=50000,
             learning_starts=600,
+            exploration_fraction=0.05,
             gamma=0.75,
             )
 
-Model.learn(total_timesteps=int(5e5), tb_log_name='DQN_net_arch_learning_buffer')
+Model.learn(total_timesteps=int(1e6), tb_log_name='DQN_net_arch_learning_buffer')
 
 Model.save("dqn_sumo_net_arch_learning_buffer")
 
